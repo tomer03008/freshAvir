@@ -1,5 +1,5 @@
 const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-const isMobile = window.matchMedia('(max-width: 900px)').matches;
+const isMobile = window.matchMedia('(max-width: 768px)').matches;
 const isCoarsePointer = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
 const saveData = Boolean(navigator.connection?.saveData);
 const liteMode = isMobile || isCoarsePointer || saveData;
@@ -18,8 +18,6 @@ const ready = (fn) => {
 };
 
 ready(() => {
-  if (liteMode) document.documentElement.classList.add('is-touch');
-
   initNav();
   initDrawer();
   initHeroVideo();
