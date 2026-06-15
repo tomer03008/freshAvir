@@ -1,0 +1,763 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0EA5C4">
+
+  <title>פרש אייר — ניקוי תעלות מיזוג מרכזי | מומחים בסטנדרט הגבוה בישראל</title>
+  <meta name="description" content="ניקוי וחיטוי תעלות מיזוג מרכזי לבתים, משרדים ועסקים. טכנולוגיה מתקדמת, שקיפות מלאה, צילום לפני ואחרי. אוויר נקי ובריא, באמת. דברו איתנו: 053-579-8700.">
+  <meta name="keywords" content="ניקוי תעלות מיזוג, ניקוי תעלות מיזוג מרכזי, חיטוי מערכת מיזוג, ניקוי מזגן מרכזי, ניקוי VRF, חיטוי תעלות, פרש אייר">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="he_IL">
+  <meta property="og:title" content="פרש אייר — מומחים בניקוי תעלות מיזוג מרכזי">
+  <meta property="og:description" content="טכנולוגיה מתקדמת, שירות מקצועי, סטנדרט גבוה — אוויר נקי ובריא.">
+  <meta property="og:image" content="assets/After_HVAC.jpeg">
+
+  <!-- Preload critical -->
+  <link rel="preload" href="assets/logo.png" as="image">
+
+  <!-- Fonts — async load, trimmed weights -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Secular+One&family=Heebo:wght@400;500;700&family=Karantina:wght@400;700&family=Rubik+Distressed&display=swap&subset=hebrew" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Secular+One&family=Heebo:wght@400;500;700&family=Karantina:wght@400;700&family=Rubik+Distressed&display=swap&subset=hebrew"></noscript>
+
+  <link rel="stylesheet" href="styles/main.css">
+
+  <!-- Structured data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": "פרש אייר",
+    "description": "מומחים בניקוי וחיטוי תעלות מיזוג מרכזי לבתים, משרדים ועסקים",
+    "telephone": "+972535798700",
+    "url": "",
+    "areaServed": "IL",
+    "priceRange": "$$",
+    "address": {
+      "@type": "PostalAddress",
+      "addressCountry": "IL"
+    }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "איך יודעים שהגיע הזמן לנקות את התעלות?",
+        "acceptedAnswer": {"@type": "Answer", "text": "ריח מחניק או טחוב מהמיזוג, אבק סביב פתחי האוויר, הרגשה שהמערכת עובדת קשה ומקררת פחות טוב."}
+      },
+      {
+        "@type": "Question",
+        "name": "מה ההבדל בין ניקוי פילטר לניקוי תעלות?",
+        "acceptedAnswer": {"@type": "Answer", "text": "ניקוי פילטר מטפל רק בחלק הקרוב ליחידה. תעלות המיזוג ממשיכות לצבור אבק, עובש ולכלוך עמוק במערכת — לשם הניקוי המקצועי מגיע."}
+      }
+    ]
+  }
+  </script>
+
+  <!--
+    Media replacement map:
+    - Logo: assets/logo.png
+    - Hero video: assets/Hero.mp4
+    - Before/after pairs: assets/Before_HVAC.jpeg, assets/After_HVAC.jpeg,
+      assets/Before_AirCond.jpeg, assets/After_AircCond.jpeg
+    - Technology visuals: assets/vacuum-machine.jpeg, assets/equipment-flatlay.jpeg,
+      assets/fogging.jpeg, assets/brush-in-duct.jpeg
+    - Global 3D dust: assets/dust_looping_glb/dust_looping_rigged.glb
+  -->
+
+  <!-- Three.js import map — used only by dust.js on desktop -->
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+      "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+    }
+  }
+  </script>
+</head>
+<body>
+
+  <!-- ============================================================
+       Global 3D dust canvas — sits behind everything.
+       Loads assets/dust_looping_glb/dust_looping_rigged.glb
+       Mouse-reactive, scroll-pulled, pointer-events: none.
+       Lighter on mobile. Disabled for prefers-reduced-motion.
+       ============================================================ -->
+  <canvas id="dust-canvas" aria-hidden="true"></canvas>
+
+  <!-- ============================================================
+       NAV
+       ============================================================ -->
+  <header class="nav" id="nav">
+    <div class="container nav__inner">
+      <a href="#top" class="nav__brand" aria-label="פרש אייר — לראש העמוד">
+        <img src="assets/logo.png" alt="" width="44" height="44">
+        <span>פרש אייר</span>
+      </a>
+
+      <nav class="nav__links" aria-label="ניווט ראשי">
+        <a href="#problem">הבעיה</a>
+        <a href="#proof">לפני / אחרי</a>
+        <a href="#process">התהליך</a>
+        <a href="#tech">טכנולוגיה</a>
+        <a href="#faq">שאלות</a>
+      </nav>
+
+      <a href="tel:0535798700" class="nav__cta">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        <span><bdi>053-579-8700</bdi></span>
+      </a>
+
+      <button class="nav__burger" aria-label="פתח תפריט" aria-controls="drawer" aria-expanded="false" id="burger">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Mobile drawer -->
+  <div class="drawer" id="drawer" hidden>
+    <div class="drawer__panel" role="dialog" aria-label="תפריט ניווט">
+      <button class="drawer__close" aria-label="סגור תפריט" id="drawer-close">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+      <nav class="drawer__links" aria-label="ניווט נייד">
+        <a href="#problem">הבעיה הסמויה</a>
+        <a href="#proof">לפני / אחרי</a>
+        <a href="#process">התהליך</a>
+        <a href="#tech">טכנולוגיה</a>
+        <a href="#why">למה לבחור בנו</a>
+        <a href="#faq">שאלות נפוצות</a>
+        <a href="https://wa.me/972535798700" class="btn btn--primary">דברו איתנו בוואטסאפ</a>
+      </nav>
+    </div>
+  </div>
+
+  <main id="top">
+
+    <!-- ============================================================
+         HERO
+         ============================================================ -->
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero__media">
+        <video class="hero__video" autoplay muted loop playsinline preload="metadata" poster="assets/After_HVAC.jpeg" aria-hidden="true">
+          <source src="assets/Hero.mp4" type="video/mp4">
+        </video>
+      </div>
+
+      <div class="container hero__inner" data-hero-stage>
+        <span class="eyebrow" data-hero-el="eyebrow">מומחי תעלות מיזוג מרכזי בישראל</span>
+
+        <h1 class="hero__title" id="hero-title" data-hero-el="title">
+          <span class="hero__title-line"><span class="hero__title-inner">מה שמצטבר עמוק בתעלות —</span></span>
+          <span class="hero__title-line"><span class="hero__title-inner">אתם <span class="accent">נושמים</span> אותו כל יום.</span></span>
+        </h1>
+
+        <p class="hero__lead" data-hero-el="lead">
+          ניקוי וחיטוי תעלות מיזוג מרכזי לבתים, משרדים ועסקים — בסטנדרט הגבוה בישראל. אנחנו מראים לכם בדיוק מה ניקינו: לפני, ואחרי, על המערכת שלכם.
+        </p>
+
+        <div class="hero__ctas" data-hero-el="ctas">
+          <a href="https://wa.me/972535798700" class="btn btn--primary btn--lg">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M.057 24l1.687-6.163a11.867 11.867 0 0 1-1.587-5.946C.16 5.335 5.495 0 12.05 0a11.817 11.817 0 0 1 8.413 3.488 11.824 11.824 0 0 1 3.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 0 1-5.688-1.448L.057 24zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+            <span>דברו איתנו בוואטסאפ</span>
+          </a>
+          <a href="tel:0535798700" class="hero__phone">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            <span>053-579-8700</span>
+          </a>
+        </div>
+
+        <ul class="hero__trust" aria-label="יתרונות מהירים">
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>ייעוץ ללא התחייבות</span>
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>טכנולוגיה מתקדמת</span>
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>בתים · משרדים · עסקים</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="hero__scroll-cue" aria-hidden="true">
+        <span>גלילה</span>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         PROBLEM
+         ============================================================ -->
+    <section class="problem" id="problem" aria-labelledby="problem-title">
+      <div class="container">
+        <header class="section-head" data-reveal>
+          <span class="eyebrow">מה באמת קורה מעל הראש שלכם</span>
+          <h2 id="problem-title">
+            מערכת המיזוג שלכם נראית נקייה.<br>
+            בפנים זה <span class="accent">סיפור אחר</span>.
+          </h2>
+        </header>
+
+        <div class="problem__grid" data-problem-stage>
+          <div class="problem__media" data-reveal>
+            <figure class="problem__visual">
+              <img src="assets/brush-in-duct.jpeg" alt="מברשת מסתובבת בתוך תעלת מיזוג מזוהמת — תיעוד של עומק הלכלוך שמצטבר במערכת המרכזית" loading="lazy">
+              <div class="problem__dirt" aria-hidden="true"></div>
+            </figure>
+            <figure class="problem__visual problem__visual--secondary">
+              <img src="assets/Before_HVAC.jpeg" alt="פנים תעלת מיזוג מרכזי לפני ניקוי — שכבות אבק ולכלוך" loading="lazy">
+            </figure>
+          </div>
+
+          <div class="problem__col">
+            <p class="lead" data-reveal>
+              תעלות המיזוג הן "הריאות" של הבית או המשרד — כל האוויר שאתם נושמים עובר דרכן. עם השנים מצטברים בתוכן אבק, לחות, עובש וחלקיקים שאתם לא רואים. בכל פעם שהמיזוג נדלק, הם חוזרים לחלל ומסתובבים באוויר שאתם והילדים נושמים.
+            </p>
+
+            <ul class="problem__items">
+              <li class="problem__item" data-problem-item="1">
+                <span class="problem__item-num">01</span>
+                <div>
+                  <h3>תעלות מזוהמות</h3>
+                  <p>שכבות אבק ולכלוך לאורך כל התעלה — בדיוק במסלול שהאוויר עובר אליכם.</p>
+                </div>
+              </li>
+
+              <li class="problem__item" data-problem-item="2">
+                <span class="problem__item-num">02</span>
+                <div>
+                  <h3>עובש ולחות</h3>
+                  <p>חום ולחות בתוך המערכת יוצרים תנאים מושלמים לעובש. גם מקור הריח הטחוב כשמדליקים מיזוג אחרי הפסקה.</p>
+                </div>
+              </li>
+
+              <li class="problem__item" data-problem-item="3">
+                <span class="problem__item-num">03</span>
+                <div>
+                  <h3>סליל ומפוח חסומים</h3>
+                  <p>כשהסליל והמפוח מתכסים באבק, המערכת עובדת קשה יותר, מקררת פחות טוב — וחשבון החשמל מטפס.</p>
+                </div>
+              </li>
+            </ul>
+
+            <div class="problem__stat" data-reveal>
+              <span class="problem__stat-num"><span data-count="90">0</span><small>%</small></span>
+              <p class="problem__stat-label">מהזמן אנחנו נמצאים בחלל סגור — נושמים את אותו אוויר ממוחזר.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         BEFORE / AFTER
+         ============================================================ -->
+    <section class="ba" id="proof" aria-labelledby="ba-title">
+      <div class="container ba__inner-grid">
+        <header class="ba__info" data-reveal>
+          <span class="eyebrow">לפני ואחרי — על המערכת שלכם</span>
+          <h2 id="ba-title">
+            לא מספרים לכם שניקינו.<br>
+            <span class="accent">מראים</span> לכם.
+          </h2>
+          <p class="lead" style="margin-top: 1.25rem;">
+            החליקו את הידית וראו את ההבדל האמיתי. כל לקוח מקבל תיעוד מלא של המערכת שלו — לפני הטיפול ואחריו. בלי הבטחות, רק תוצאה שרואים בעיניים.
+          </p>
+        </header>
+
+        <div class="ba__cards">
+          <article class="ba__card" data-ba-reveal>
+            <div class="ba__card-title">
+              <h3>תעלת מיזוג ראשית</h3>
+              <span class="ba__progress" aria-hidden="true"><span class="ba__progress-fill"></span></span>
+            </div>
+            <div class="ba__viewer" data-ba-viewer data-ba-subject="duct">
+              <img src="assets/After_HVAC.jpeg" alt="תעלת מיזוג ראשית אחרי ניקוי וחיטוי — נקייה" class="ba__img ba__img--after">
+              <img src="assets/Before_HVAC.jpeg" alt="תעלת מיזוג ראשית לפני ניקוי — מזוהמת באבק ולכלוך" class="ba__img ba__img--before">
+              <div class="ba__sweep" aria-hidden="true"></div>
+              <div class="ba__labels" aria-hidden="true">
+                <span class="ba__label ba__label--before">מצב לפני</span>
+                <span class="ba__label ba__label--after">אחרי הטיפול</span>
+              </div>
+              <button class="ba__handle" aria-label="גרור להשוואה בין לפני ואחרי" type="button" role="slider" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/><polyline points="9 18 15 12 9 6" transform="translate(8 0)"/></svg>
+              </button>
+            </div>
+            <p class="ba__hint">גרור או לחץ כדי לשלוט בעצמך</p>
+          </article>
+
+          <article class="ba__card" data-ba-reveal>
+            <div class="ba__card-title">
+              <h3>יחידת מיזוג מרכזי</h3>
+              <span class="ba__progress" aria-hidden="true"><span class="ba__progress-fill"></span></span>
+            </div>
+            <div class="ba__viewer" data-ba-viewer data-ba-subject="ac">
+              <img src="assets/After_AircCond.jpeg" alt="יחידת מיזוג מרכזי אחרי טיפול — נקייה" class="ba__img ba__img--after">
+              <img src="assets/Before_AirCond.jpeg" alt="יחידת מיזוג מרכזי לפני טיפול — מזוהמת" class="ba__img ba__img--before">
+              <div class="ba__sweep" aria-hidden="true"></div>
+              <div class="ba__labels" aria-hidden="true">
+                <span class="ba__label ba__label--before">מצב לפני</span>
+                <span class="ba__label ba__label--after">אחרי הטיפול</span>
+              </div>
+              <button class="ba__handle" aria-label="גרור להשוואה בין לפני ואחרי" type="button" role="slider" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/><polyline points="9 18 15 12 9 6" transform="translate(8 0)"/></svg>
+              </button>
+            </div>
+            <p class="ba__hint">גרור או לחץ כדי לשלוט בעצמך</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         PROCESS
+         ============================================================ -->
+    <section class="process" id="process" aria-labelledby="process-title">
+      <div class="container">
+        <header class="section-head" data-reveal>
+          <span class="eyebrow">שיטה מסודרת, בלי קיצורי דרך</span>
+          <h2 id="process-title">ככה אנחנו עובדים — שלב אחרי שלב</h2>
+          <p class="lead" style="margin-top: 1.25rem;">
+            אנחנו לא "עושים סיבוב" וממשיכים הלאה. כל עבודה מתנהלת לפי תהליך מסודר, ואתם יודעים בדיוק מה קורה בכל רגע.
+          </p>
+        </header>
+
+        <ol class="process__rail">
+          <div class="process__track" aria-hidden="true"></div>
+
+          <li class="process__step" data-step="1">
+            <span class="process__step-num">01</span>
+            <h3>אבחון ויזואלי</h3>
+            <p>בדיקה וצילום של מצב התעלות מבפנים. אתם רואים בדיוק מה המצב לפני שמתחילים — בלי ניחושים.</p>
+          </li>
+
+          <li class="process__step" data-step="2">
+            <span class="process__step-num">02</span>
+            <h3>גישה לכל המערכת</h3>
+            <p>מגיעים לכל נקודה במערכת המרכזית דרך הפתחים הקיימים — בלי שבירת קירות או תקרה.</p>
+          </li>
+
+          <li class="process__step" data-step="3">
+            <span class="process__step-num">03</span>
+            <h3>ניקוי וחיטוי יסודי</h3>
+            <p>קרצוף מכני של התעלות, ולאחריו חיטוי בערפול (Fogging) להסרת מזהמים ולאוויר רענן.</p>
+          </li>
+
+          <li class="process__step" data-step="4">
+            <span class="process__step-num">04</span>
+            <h3>אישור תוצאה</h3>
+            <p>מצלמים שוב, ועוברים איתכם יחד על מה שנעשה. תיעוד מלא ומערכת שבאמת נקייה.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         TECHNOLOGY
+         ============================================================ -->
+    <section class="tech" id="tech" aria-labelledby="tech-title">
+      <div class="container">
+        <header class="section-head" data-reveal>
+          <span class="eyebrow">הכלים שעושים את ההבדל</span>
+          <h2 id="tech-title">
+            טכנולוגיה מתקדמת.<br>
+            תוצאה <span class="accent">שמרגישים</span> באוויר.
+          </h2>
+          <p class="lead" style="margin-top: 1.25rem;">
+            ניקוי תעלות מיזוג מרכזי דורש הרבה יותר משואב ביתי. אנחנו עובדים עם ציוד ייעודי שמגיע למקומות שאי אפשר לראות.
+          </p>
+        </header>
+
+        <div class="tech__grid">
+          <article class="tech__card" data-reveal>
+            <figure class="tech__media">
+              <img src="assets/vacuum-machine.jpeg" alt="מכונת שאיבה מקצועית בלחץ שלילי לניקוי תעלות מיזוג מרכזי" loading="lazy">
+            </figure>
+            <div class="tech__body">
+              <span class="tech__step">שלב 1</span>
+              <h3>שאיבה בלחץ שלילי</h3>
+              <p>מערכת שאיבה עוצמתית שיוצרת לחץ שלילי בתוך התעלה — האבק והלכלוך נשאבים החוצה ונאספים, בלי שייפלט גרגר אחד חזרה לחלל שלכם.</p>
+            </div>
+          </article>
+
+          <article class="tech__card" data-reveal>
+            <figure class="tech__media">
+              <img src="assets/equipment-flatlay.jpeg" alt="ערכת ציוד מקצועית: צינור, מברשות וספריי חיטוי מסודרים" loading="lazy">
+            </figure>
+            <div class="tech__body">
+              <span class="tech__step">שלב 2</span>
+              <h3>קרצוף מכני לעומק</h3>
+              <p>מברשות מסתובבות ייעודיות שמגיעות לאורך התעלה ומשחררות אבק, לכלוך ושכבות שהצטברו לאורך השנים — גם בפינות הנסתרות.</p>
+            </div>
+          </article>
+
+          <article class="tech__card" data-reveal>
+            <figure class="tech__media">
+              <img src="assets/fogging.jpeg" alt="חיטוי בערפול במערכת מיזוג — שלב הסיום של תהליך הניקוי" loading="lazy">
+            </figure>
+            <div class="tech__body">
+              <span class="tech__step">שלב 3</span>
+              <h3>חיטוי בערפול</h3>
+              <p>חיטוי מבוקר בערפול שמטפל בעובש ובמזהמים — בלי ריחות אגרסיביים, רק אוויר רענן ובריא.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         WHY US — minimal light split layout
+         ============================================================ -->
+    <section class="why" id="why" aria-labelledby="why-title">
+      <div class="container why__inner">
+        <header class="why__head" data-reveal>
+          <span class="eyebrow">הסטנדרט של פרש אייר</span>
+          <h2 id="why-title">ארבע סיבות שלקוחות בוחרים בנו</h2>
+          <p class="lead">
+            אנחנו מתייחסים לתעלות שלכם כאילו הן אצלנו בבית. יסודיות, שקיפות ומקצועיות — בכל עבודה.
+          </p>
+          <a href="https://wa.me/972535798700" class="btn btn--primary why__cta">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M.057 24l1.687-6.163a11.867 11.867 0 0 1-1.587-5.946C.16 5.335 5.495 0 12.05 0a11.817 11.817 0 0 1 8.413 3.488 11.824 11.824 0 0 1 3.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 0 1-5.688-1.448L.057 24zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+            <span>קבלו הצעת מחיר</span>
+          </a>
+        </header>
+
+        <ol class="why__list">
+          <li class="why__row">
+            <span class="why__num">01</span>
+            <div class="why__body">
+              <h3>100% שקיפות</h3>
+              <p>צילום לפני ואחרי, הסבר על כל שלב, ומעבר משותף בסיום. בלי הבטחות מעורפלות — רק תוצאה מוכחת.</p>
+            </div>
+            <span class="why__arrow" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+            </span>
+          </li>
+
+          <li class="why__row">
+            <span class="why__num">02</span>
+            <div class="why__body">
+              <h3>סטנדרט עבודה גבוה</h3>
+              <p>עוברים תעלה-תעלה, יסודי, עד שהמערכת באמת נקייה — לא "נראית נקייה". בלי קיצורי דרך.</p>
+            </div>
+            <span class="why__arrow" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+            </span>
+          </li>
+
+          <li class="why__row">
+            <span class="why__num">03</span>
+            <div class="why__body">
+              <h3>טכנולוגיה וציוד מתקדמים</h3>
+              <p>שאיבה בלחץ שלילי, קרצוף מכני וחיטוי בערפול — תוצאה שציוד ביתי פשוט לא מסוגל לה.</p>
+            </div>
+            <span class="why__arrow" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+            </span>
+          </li>
+
+          <li class="why__row">
+            <span class="why__num">04</span>
+            <div class="why__body">
+              <h3>עבודה נקייה, בלי בלאגן</h3>
+              <p>מגנים על רהיטים ורצפה, מסיימים והמקום נשאר נקי בדיוק כפי שהיה — חוץ מהתעלות.</p>
+            </div>
+            <span class="why__arrow" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+            </span>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         AUDIENCE
+         ============================================================ -->
+    <section class="audience" id="audience" aria-labelledby="audience-title">
+      <div class="container">
+        <header class="section-head" data-reveal>
+          <span class="eyebrow">אולי גם אתם</span>
+          <h2 id="audience-title">מתי כדאי לנקות תעלות מיזוג?</h2>
+        </header>
+
+        <div class="audience__list">
+          <article class="audience__item" data-reveal>
+            <span class="audience__item-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            </span>
+            <div>
+              <h3>בתים ודירות עם מיזוג מרכזי</h3>
+              <p>כשכל הבית מקבל אוויר דרך תעלות, הלכלוך מצטבר עמוק במערכת — לא רק ליד היחידה.</p>
+            </div>
+          </article>
+
+          <article class="audience__item" data-reveal>
+            <span class="audience__item-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            </span>
+            <div>
+              <h3>משפחות עם ילדים ורגישות נשימתית</h3>
+              <p>אם מישהו בבית רגיש לאבק, ריחות או אוויר "כבד" — ניקוי תעלות עושה הבדל באוויר שנושמים.</p>
+            </div>
+          </article>
+
+          <article class="audience__item" data-reveal>
+            <span class="audience__item-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8"/><path d="M12 17v4"/></svg>
+            </span>
+            <div>
+              <h3>משרדים, קליניקות ועסקים</h3>
+              <p>במקום שבו אנשים שוהים שעות בחלל סגור, איכות האוויר משפיעה ישירות על נוחות, ריכוז ובריאות.</p>
+            </div>
+          </article>
+
+          <article class="audience__item" data-reveal>
+            <span class="audience__item-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            </span>
+            <div>
+              <h3>אחרי שיפוץ או צביעה</h3>
+              <p>אבק בנייה וחלקיקים מוצאים את דרכם לתוך התעלות. ניקוי מוציא אותם מהמערכת.</p>
+            </div>
+          </article>
+
+          <article class="audience__item" data-reveal>
+            <span class="audience__item-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><line x1="2" y1="2" x2="22" y2="22"/></svg>
+            </span>
+            <div>
+              <h3>ריח טחוב כשמדליקים מיזוג</h3>
+              <p>ריח לא נעים מהפתחים הוא סימן מובהק לעובש ולחות שהצטברו בתוך התעלות.</p>
+            </div>
+          </article>
+
+          <article class="audience__item" data-reveal>
+            <span class="audience__item-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            </span>
+            <div>
+              <h3>מערכת ותיקה שלא טופלה שנים</h3>
+              <p>ככל שהמערכת ותיקה ועובדת יותר, כך היא צוברת יותר לכלוך — והחשיבות של ניקוי תקופתי גדלה.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         FAQ
+         ============================================================ -->
+    <section class="faq" id="faq" aria-labelledby="faq-title">
+      <div class="container">
+        <header class="section-head" data-reveal>
+          <span class="eyebrow">שאלות נפוצות</span>
+          <h2 id="faq-title">כל מה שצריך לדעת על ניקוי תעלות מיזוג</h2>
+        </header>
+
+        <div class="faq__list">
+          <details class="faq__item">
+            <summary class="faq__q">
+              <span>איך יודעים שהגיע הזמן לנקות את התעלות?</span>
+              <span class="faq__q-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>
+            </summary>
+            <div class="faq__a">
+              <p>הסימנים הבולטים: ריח מחניק או טחוב כשמדליקים מיזוג, אבק שמצטבר סביב פתחי האוויר, או הרגשה שהמערכת עובדת קשה יותר ומקררת פחות טוב. אם משהו מזה מוכר — שווה לבדוק מה קורה בתוך התעלות.</p>
+            </div>
+          </details>
+
+          <details class="faq__item">
+            <summary class="faq__q">
+              <span>מה ההבדל בין ניקוי פילטר לניקוי תעלות?</span>
+              <span class="faq__q-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>
+            </summary>
+            <div class="faq__a">
+              <p>ניקוי פילטר מטפל רק בחלק הקרוב ליחידה — וזה משהו שאפשר לעשות גם לבד. תעלות המיזוג עצמן ממשיכות לצבור אבק, עובש ולכלוך לאורך השנים, במקומות שהפילטר לא מגיע אליהם. ניקוי תעלות מקצועי מגיע עמוק לתוך המערכת — לשם הלכלוך האמיתי מצטבר.</p>
+            </div>
+          </details>
+
+          <details class="faq__item">
+            <summary class="faq__q">
+              <span>כל כמה זמן מומלץ לנקות?</span>
+              <span class="faq__q-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>
+            </summary>
+            <div class="faq__a">
+              <p>זה תלוי בשימוש, בגיל המערכת ובסביבה. בבתים עם ילדים, חיות מחמד או אלרגיות — כדאי תדירות גבוהה יותר. אנחנו ממליצים לפי מצב המערכת בפועל, לא לפי לוח שנה קבוע.</p>
+            </div>
+          </details>
+
+          <details class="faq__item">
+            <summary class="faq__q">
+              <span>האם ניקוי תעלות משפיע על חשבון החשמל?</span>
+              <span class="faq__q-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>
+            </summary>
+            <div class="faq__a">
+              <p>מערכת נקייה זורמת טוב יותר ועובדת פחות קשה. כשיש פחות הצטברות לכלוך בתעלות ובמערכת, המיזוג יעיל יותר — ובמקרים רבים זה מתבטא גם בצריכת חשמל נמוכה יותר לאורך זמן.</p>
+            </div>
+          </details>
+
+          <details class="faq__item">
+            <summary class="faq__q">
+              <span>האם צריך לצאת מהבית או מהמשרד בזמן העבודה?</span>
+              <span class="faq__q-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>
+            </summary>
+            <div class="faq__a">
+              <p>ברוב המקרים אפשר להישאר כרגיל. אנחנו עובדים עם ציוד וחומרים מתאימים ומקפידים על אוורור ועבודה נקייה. אם יש שלב שבו כדאי להתרחק לזמן קצר — נעדכן אתכם מראש.</p>
+            </div>
+          </details>
+
+          <details class="faq__item">
+            <summary class="faq__q">
+              <span>האם הניקוי דורש שבירת קירות או תקרה?</span>
+              <span class="faq__q-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>
+            </summary>
+            <div class="faq__a">
+              <p>לא. אנחנו עובדים דרך הפתחים הקיימים והגישה לתעלות, עם מינימום התערבות במבנה. תמיד נסביר מראש אם יש משהו חריג שדורש התייחסות מיוחדת.</p>
+            </div>
+          </details>
+
+          <details class="faq__item">
+            <summary class="faq__q">
+              <span>איזו אחריות יש על העבודה?</span>
+              <span class="faq__q-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>
+            </summary>
+            <div class="faq__a">
+              <p>אנחנו עומדים מאחורי העבודה שלנו. מסבירים מראש מה מצב המערכת ומה אפשר להשיג, ומסיימים עם תיעוד מלא. אם משהו לא ברור או לא מרגיש תקין אחרי הטיפול — אנחנו כאן לבדוק ולתת מענה.</p>
+            </div>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         CTA FINAL — full-bleed background image (16:9)
+         ============================================================ -->
+    <section class="cta-final" id="contact" aria-labelledby="cta-title">
+      <div class="cta-final__bg" aria-hidden="true">
+        <img src="assets/Person_breathing_on_luxury_sofa_202606141956.jpeg" alt="" loading="lazy">
+      </div>
+
+      <div class="container cta-final__inner" data-reveal>
+        <span class="cta-final__eyebrow">צרו קשר</span>
+        <h2 id="cta-title">הגיע הזמן לנשום אוויר<br>נקי ובריא — באמת.</h2>
+        <p>השאירו הודעה ונחזור אליכם לשיחת התאמה קצרה: נבין מה אתם מרגישים בחלל — ריח, אבק, תחושת כובד — וניתן הערכה מקצועית וכנה. בלי התחייבות, בלי אותיות קטנות.</p>
+
+        <div class="cta-final__ctas">
+          <a href="https://wa.me/972535798700" class="btn btn--primary btn--lg">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M.057 24l1.687-6.163a11.867 11.867 0 0 1-1.587-5.946C.16 5.335 5.495 0 12.05 0a11.817 11.817 0 0 1 8.413 3.488 11.824 11.824 0 0 1 3.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 0 1-5.688-1.448L.057 24zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+            <span>דברו איתנו בוואטסאפ</span>
+          </a>
+          <a href="tel:0535798700" class="btn btn--ghost btn--lg cta-final__phone">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            <span><bdi>053-579-8700</bdi></span>
+          </a>
+        </div>
+
+        <aside class="cta-final__review" data-reveal aria-label="השארת ביקורת בגוגל">
+          <div class="cta-final__review-badge" aria-hidden="true">
+            <svg class="cta-final__review-google" viewBox="0 0 24 24" role="img" aria-label="Google">
+              <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/>
+              <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+              <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+              <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+            </svg>
+            <div class="cta-final__review-stars">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            </div>
+          </div>
+          <div class="cta-final__review-copy">
+            <p class="cta-final__review-title">כבר קיבלתם שירות מאיתנו?</p>
+            <p class="cta-final__review-text">ביקורת קצרה בגוגל עוזרת ללקוחות אחרים לבחור נכון — ולנו להמשיך לתת שירות מעולה.</p>
+          </div>
+          <a href="https://share.google/MC6WYDJY22iJSfclY" class="cta-final__review-btn" target="_blank" rel="noopener noreferrer">
+            <span>השאירו ביקורת בגוגל</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
+          </a>
+        </aside>
+
+        <ul class="cta-final__trust" aria-label="התחייבויות שירות">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>חוזרים תוך שעת עבודה</span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>הערכת מחיר ללא עלות</span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>בלי התחייבות</span></li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============================================================
+       FOOTER
+       ============================================================ -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__grid">
+        <div>
+          <div class="footer__brand">
+            <img src="assets/logo.png" alt="פרש אייר" width="48" height="48">
+            <span class="footer__brand-name">פרש אייר</span>
+          </div>
+          <p>מומחים בניקוי וחיטוי תעלות מיזוג מרכזי לבתים, משרדים ועסקים. טכנולוגיה מתקדמת, עבודה בסטנדרט גבוה, ושקיפות מלאה — אוויר נקי ובריא, כמו שצריך.</p>
+        </div>
+
+        <div>
+          <h4>ניווט מהיר</h4>
+          <ul class="footer__nav">
+            <li><a href="#top">דף הבית</a></li>
+            <li><a href="#problem">הבעיה</a></li>
+            <li><a href="#process">התהליך</a></li>
+            <li><a href="#tech">הטכנולוגיה</a></li>
+            <li><a href="#faq">שאלות נפוצות</a></li>
+            <li><a href="#contact">צרו קשר</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4>יצירת קשר</h4>
+          <ul class="footer__contact">
+            <li><a href="tel:0535798700" class="footer__phone">053-579-8700</a></li>
+            <li><a href="https://wa.me/972535798700">וואטסאפ</a></li>
+            <li><a href="https://share.google/MC6WYDJY22iJSfclY" class="footer__review" target="_blank" rel="noopener noreferrer">ביקורת בגוגל</a></li>
+            <li>אזורי שירות: כל הארץ</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer__bottom">
+        <span>© 2026 פרש אייר — ניקוי תעלות ומערכות מיזוג מרכזי. כל הזכויות שמורות.</span>
+        <div class="footer__bottom-links">
+          <a href="#">מדיניות פרטיות</a>
+          <a href="#">הצהרת נגישות</a>
+          <a href="#">תקנון</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Floating WhatsApp -->
+  <a href="https://wa.me/972535798700" class="fab" aria-label="פתח שיחת וואטסאפ">
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M.057 24l1.687-6.163a11.867 11.867 0 0 1-1.587-5.946C.16 5.335 5.495 0 12.05 0a11.817 11.817 0 0 1 8.413 3.488 11.824 11.824 0 0 1 3.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 0 1-5.688-1.448L.057 24zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+  </a>
+
+  <!-- Optional animation libraries. main.js has native fallbacks if a CDN is unavailable. -->
+  <script defer src="https://unpkg.com/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script defer src="https://unpkg.com/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+  <script defer src="https://unpkg.com/lenis@1.1.19/dist/lenis.min.js"></script>
+
+  <!-- Scripts (module entry) -->
+  <script type="module" src="scripts/main.js"></script>
+</body>
+</html>
