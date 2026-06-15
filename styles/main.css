@@ -2339,6 +2339,7 @@ p {
     text-align: center;
   }
   .cta-final__review-badge { flex-direction: row; justify-content: center; }
+  .cta-final__review-copy { flex: 0 0 auto; }
   .cta-final__review-btn { justify-content: center; inline-size: 100%; }
 }
 
@@ -2806,6 +2807,10 @@ p {
     padding-block: clamp(2.25rem, 7.5vw, 3.25rem);
   }
 
+  .cta-final__inner {
+    gap: var(--s-3);
+  }
+
   .cta-final h2 {
     font-size: clamp(1.55rem, 6.5vw, 2rem);
   }
@@ -2814,13 +2819,31 @@ p {
     font-size: 1rem;
   }
 
+  .cta-final__ctas {
+    margin-block-start: 0;
+    gap: var(--s-3);
+  }
+
   .cta-final__review {
+    gap: var(--s-3);
+    padding: var(--s-3) var(--s-4);
+    margin-block-start: var(--s-2);
     text-align: center;
+  }
+
+  .cta-final__review-copy {
+    flex: 0 0 auto;
   }
 
   .cta-final__review-btn {
     white-space: normal;
     line-height: 1.35;
+  }
+
+  .cta-final__trust {
+    margin-block-start: var(--s-3);
+    padding-block-start: var(--s-3);
+    gap: var(--s-2) var(--s-3);
   }
 
   .fab {
