@@ -454,6 +454,7 @@ main, header, footer {
 @media (max-width: 900px) {
   .nav__links { display: none; }
   .nav__burger { display: inline-flex; }
+  .nav__cta { display: none; }
 }
 
 /* Mobile drawer */
@@ -1136,6 +1137,16 @@ main, header, footer {
     min-block-size: 280px;
     max-block-size: 480px;
   }
+
+  .ba__handle {
+    inline-size: 52px;
+    block-size: 52px;
+  }
+
+  .ba__handle::after {
+    font-size: 0.72rem;
+    inset-block-start: calc(100% + 8px);
+  }
 }
 
 /* After (clean) sits below, fully visible underneath */
@@ -1233,13 +1244,14 @@ main, header, footer {
   inset-block-start: 50%;
   transform: translate(-50%, -50%);
   z-index: 6;
-  inline-size: 52px;
-  block-size: 52px;
+  inline-size: 56px;
+  block-size: 56px;
   border-radius: 50%;
   background: #fff;
+  border: 2px solid var(--c-brand);
   display: grid;
   place-items: center;
-  box-shadow: 0 0 0 4px rgba(14, 165, 196, 0.28), 0 12px 32px rgba(0, 0, 0, 0.28);
+  box-shadow: 0 0 0 4px rgba(14, 165, 196, 0.32), 0 12px 32px rgba(0, 0, 0, 0.32);
   cursor: ew-resize;
   pointer-events: auto;
   opacity: 0;
@@ -1250,20 +1262,53 @@ main, header, footer {
   opacity: 1;
 }
 
+.ba__card.is-visible:not(.is-user-controlled):not(.is-dragging) .ba__handle {
+  animation: ba-handle-pulse 2.2s ease-in-out infinite;
+}
+
+@keyframes ba-handle-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 4px rgba(14, 165, 196, 0.32), 0 12px 32px rgba(0, 0, 0, 0.32);
+  }
+  50% {
+    box-shadow: 0 0 0 9px rgba(14, 165, 196, 0.42), 0 14px 36px rgba(0, 0, 0, 0.36);
+  }
+}
+
 .ba__handle:hover {
-  box-shadow: 0 0 0 5px rgba(14, 165, 196, 0.4), 0 16px 40px rgba(0, 0, 0, 0.32);
+  box-shadow: 0 0 0 6px rgba(14, 165, 196, 0.45), 0 16px 40px rgba(0, 0, 0, 0.34);
 }
 
 .ba__handle svg {
-  inline-size: 22px;
-  block-size: 22px;
+  inline-size: 24px;
+  block-size: 24px;
   color: var(--c-brand-deep);
-  transform: none;
+}
+
+.ba__handle::after {
+  content: "גרור";
+  position: absolute;
+  inset-block-start: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #fff;
+  white-space: nowrap;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.65);
+  pointer-events: none;
 }
 
 /* User-controlled state — stronger ring */
 .ba__card.is-user-controlled .ba__handle {
+  animation: none;
   box-shadow: 0 0 0 5px var(--c-brand), 0 14px 36px rgba(0, 0, 0, 0.3);
+}
+
+.ba__card.is-user-controlled .ba__handle::after {
+  content: none;
 }
 
 .ba__viewer {
@@ -1276,9 +1321,22 @@ main, header, footer {
 .ba__hint {
   margin-block-start: var(--s-3);
   text-align: center;
-  color: var(--c-ink-mute);
-  font-size: var(--fs-small);
-  letter-spacing: 0.03em;
+  color: var(--c-ink-soft);
+  font-size: 0.92rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+@media (min-width: 721px) {
+  .ba__handle {
+    inline-size: 60px;
+    block-size: 60px;
+  }
+
+  .ba__handle svg {
+    inline-size: 26px;
+    block-size: 26px;
+  }
 }
 
 /* --- Before/After split desktop grid layout --- */
@@ -2483,11 +2541,6 @@ main, header, footer {
     padding-inline: max(var(--container-pad), env(safe-area-inset-right, 0px)) max(var(--container-pad), env(safe-area-inset-left, 0px));
   }
 
-  .nav__cta {
-    padding: 0.5rem 0.85rem;
-    font-size: 0.875rem;
-  }
-
   .nav__burger {
     min-inline-size: 44px;
     min-block-size: 44px;
@@ -2599,18 +2652,5 @@ main, header, footer {
 
   .footer__phone {
     font-size: 1.25rem;
-  }
-}
-
-@media (max-width: 400px) {
-  .nav__cta span {
-    display: none;
-  }
-
-  .nav__cta {
-    padding: 0.55rem;
-    min-inline-size: 44px;
-    min-block-size: 44px;
-    justify-content: center;
   }
 }

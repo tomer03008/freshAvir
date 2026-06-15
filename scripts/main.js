@@ -282,7 +282,7 @@ function initBeforeAfter() {
       if (handle) handle.setAttribute('aria-valuenow', String(Math.round(safe)));
     };
 
-    setReveal(0);
+    setReveal(50);
 
     // Card lifts in immediately when visible
     if ('IntersectionObserver' in window) {
@@ -299,19 +299,20 @@ function initBeforeAfter() {
     }
 
     if (prefersReducedMotion) {
-      setReveal(82);
+      setReveal(50);
       return;
     }
 
-    // ---- Auto-play loop, stops the moment user interacts ----
-    const REVEAL_DUR = 2400;
-    const HOLD_AFTER = 1800;
-    const RETURN_DUR = 700;
-    const HOLD_BEFORE = 1200;
-    const TOTAL = REVEAL_DUR + HOLD_AFTER + RETURN_DUR + HOLD_BEFORE;
+    // ---- Auto-play loop around center — stops the moment user interacts ----
+    const CENTER = 50;
+    const SWING = 32;
+    const REVEAL_DUR = 2200;
+    const HOLD = 1400;
+    const TOTAL = REVEAL_DUR * 3 + HOLD * 3;
+    const HIGH = CENTER + SWING;
+    const LOW = CENTER - SWING;
 
     const easeInOutCubic = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
-    const easeInQuart = (t) => t * t * t * t;
 
     let rafId = null;
     let cycleStart = 0;
@@ -322,17 +323,27 @@ function initBeforeAfter() {
       if (userControlled) return;
       if (!cycleStart) cycleStart = now;
       const elapsed = (now - cycleStart) % TOTAL;
+      const seg1 = REVEAL_DUR;
+      const seg2 = seg1 + HOLD;
+      const seg3 = seg2 + REVEAL_DUR;
+      const seg4 = seg3 + HOLD;
+      const seg5 = seg4 + REVEAL_DUR;
       let p;
-      if (elapsed < REVEAL_DUR) {
-        p = easeInOutCubic(elapsed / REVEAL_DUR) * 100;
-      } else if (elapsed < REVEAL_DUR + HOLD_AFTER) {
-        p = 100;
-      } else if (elapsed < REVEAL_DUR + HOLD_AFTER + RETURN_DUR) {
-        const t = (elapsed - REVEAL_DUR - HOLD_AFTER) / RETURN_DUR;
-        p = (1 - easeInQuart(t)) * 100;
+
+      if (elapsed < seg1) {
+        p = CENTER + easeInOutCubic(elapsed / REVEAL_DUR) * SWING;
+      } else if (elapsed < seg2) {
+        p = HIGH;
+      } else if (elapsed < seg3) {
+        p = HIGH - easeInOutCubic((elapsed - seg2) / REVEAL_DUR) * (HIGH - LOW);
+      } else if (elapsed < seg4) {
+        p = LOW;
+      } else if (elapsed < seg5) {
+        p = LOW + easeInOutCubic((elapsed - seg4) / REVEAL_DUR) * (CENTER - LOW);
       } else {
-        p = 0;
+        p = CENTER;
       }
+
       setReveal(p);
       rafId = requestAnimationFrame(tick);
     };
