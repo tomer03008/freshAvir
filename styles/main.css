@@ -17,6 +17,9 @@ html {
   font-size: 16px;
   scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
+  overflow-x: clip;
+  max-inline-size: 100%;
+  overscroll-behavior-x: none;
 }
 
 body {
@@ -26,9 +29,21 @@ body {
   color: var(--c-ink);
   background: var(--c-bg);
   direction: rtl;
-  overflow-x: hidden;
+  overflow-x: clip;
+  max-inline-size: 100%;
+  inline-size: 100%;
+  overscroll-behavior-x: none;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+main,
+header,
+footer {
+  position: relative;
+  z-index: 1;
+  max-inline-size: 100%;
+  overflow-x: clip;
 }
 
 img,
@@ -159,6 +174,7 @@ ul {
   max-inline-size: var(--container-max);
   margin-inline: auto;
   padding-inline: var(--container-pad);
+  inline-size: 100%;
 }
 
 section {
@@ -284,11 +300,6 @@ p {
   inset: 0;
   z-index: 0;
   pointer-events: none;
-}
-
-main, header, footer {
-  position: relative;
-  z-index: 1;
 }
 
 /* -- 6. Navigation ---------------------------------------- */
@@ -467,6 +478,11 @@ main, header, footer {
   opacity: 0;
   pointer-events: none;
   transition: opacity .3s ease;
+  overflow: hidden;
+}
+
+.drawer[hidden] {
+  display: none !important;
 }
 
 .drawer.is-open {
@@ -484,12 +500,13 @@ main, header, footer {
   display: flex;
   flex-direction: column;
   gap: var(--s-5);
-  transform: translateX(100%);
+  transform: translate3d(100%, 0, 0);
   transition: transform .35s var(--ease-out);
+  will-change: transform;
 }
 
 .drawer.is-open .drawer__panel {
-  transform: translateX(0);
+  transform: translate3d(0, 0, 0);
 }
 
 .drawer__close {
@@ -1039,7 +1056,7 @@ main, header, footer {
 
 .ba__cards {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: minmax(0, 1fr);
   gap: clamp(2.5rem, 5vw, 4rem);
   max-inline-size: 1200px;
   margin-inline: auto;
@@ -1055,6 +1072,8 @@ main, header, footer {
   opacity: 0;
   transform: translateY(28px);
   filter: blur(6px);
+  min-inline-size: 0;
+  max-inline-size: 100%;
 }
 
 .ba__card.is-visible {
@@ -1100,13 +1119,16 @@ main, header, footer {
 
 .ba__viewer {
   position: relative;
+  inline-size: 100%;
+  max-inline-size: 100%;
   aspect-ratio: 3 / 2;
   min-block-size: 380px;
   max-block-size: 720px;
+  margin-inline: auto;
   border-radius: var(--card-radius);
   overflow: hidden;
   background: #0b1320;
-  --ba-reveal: 0%;
+  --ba-reveal: 50%;
   --ba-split: 50%;
   isolation: isolate;
 }
@@ -1134,8 +1156,41 @@ main, header, footer {
 @media (max-width: 720px) {
   .ba__viewer {
     aspect-ratio: 4 / 3;
-    min-block-size: 280px;
-    max-block-size: 480px;
+    min-block-size: 0;
+    max-block-size: none;
+  }
+
+  .ba__img {
+    object-fit: cover;
+    object-position: center center;
+  }
+
+  [data-ba-subject="duct"] .ba__img {
+    object-position: center center;
+  }
+
+  [data-ba-subject="ac"] .ba__img {
+    object-fit: cover;
+    object-position: center center;
+    background: #0b1320;
+  }
+
+  .ba__img--after {
+    transform: none;
+  }
+
+  .ba__labels {
+    inset-block-start: 0.75rem;
+    inset-inline: 0.75rem;
+  }
+
+  .ba__label {
+    font-size: 0.75rem;
+    padding: 0.35rem 0.7rem;
+  }
+
+  .ba__label--before {
+    font-size: 1rem;
   }
 
   .ba__handle {
@@ -1144,8 +1199,13 @@ main, header, footer {
   }
 
   .ba__handle::after {
-    font-size: 0.72rem;
-    inset-block-start: calc(100% + 8px);
+    display: none;
+  }
+
+  .ba__hint {
+    font-size: 0.85rem;
+    line-height: 1.45;
+    padding-inline: 0.15rem;
   }
 }
 
@@ -2401,6 +2461,7 @@ main, header, footer {
   box-shadow: 0 10px 30px rgba(37, 211, 102, 0.5);
   color: #fff;
   transition: transform .35s var(--ease-out);
+  overflow: hidden;
 }
 
 .fab:hover {
@@ -2599,6 +2660,18 @@ main, header, footer {
 
   .problem__visual--secondary {
     display: none;
+  }
+
+  .ba {
+    overflow-x: clip;
+  }
+
+  .ba__inner-grid {
+    min-inline-size: 0;
+  }
+
+  .ba__card {
+    padding: 1rem;
   }
 
   .ba__card-title h3 {
