@@ -1049,6 +1049,10 @@ p {
   max-inline-size: 42ch;
 }
 
+.problem__text-short {
+  display: none;
+}
+
 @media (max-width: 860px) {
   .problem__grid { grid-template-columns: 1fr; }
   .problem__visual--secondary { display: none; }
@@ -2729,6 +2733,56 @@ p {
   .tech__grid,
   .why__list {
     gap: var(--s-5);
+  }
+
+  .problem__col > .lead {
+    font-size: 0.95rem;
+    line-height: 1.55;
+    max-inline-size: 32ch;
+    margin-block-end: 0.25rem;
+  }
+
+  .problem__text-full {
+    display: none;
+  }
+
+  .problem__text-short {
+    display: block;
+  }
+
+  .problem__items {
+    gap: var(--s-3);
+    margin-block: var(--s-4);
+  }
+
+  .problem__item {
+    padding: 0.9rem 1rem;
+    grid-template-columns: auto 1fr;
+    gap: var(--s-3);
+  }
+
+  .problem__item p {
+    display: none;
+  }
+
+  .problem__item h3 {
+    font-size: 1rem;
+    margin-block-end: 0;
+  }
+
+  .problem__item-num {
+    font-size: 1.35rem;
+  }
+
+  .problem__stat {
+    margin-block-start: var(--s-4);
+    padding-block-start: var(--s-4);
+  }
+
+  .problem__stat-label {
+    font-size: 0.9rem;
+    max-inline-size: 22ch;
+    line-height: 1.45;
   }
 
   .problem__visual--secondary {
