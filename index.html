@@ -25,7 +25,15 @@
   <link rel="preload" href="https://fonts.googleapis.com/css2?family=Secular+One&family=Heebo:wght@400;500;700&family=Karantina:wght@400;700&family=Rubik+Distressed&display=swap&subset=hebrew" as="style" onload="this.onload=null;this.rel='stylesheet'">
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Secular+One&family=Heebo:wght@400;500;700&family=Karantina:wght@400;700&family=Rubik+Distressed&display=swap&subset=hebrew"></noscript>
 
-  <link rel="stylesheet" href="styles/main.css">
+  <script>
+    (function () {
+      if (window.matchMedia('(max-width: 900px), (hover: none) and (pointer: coarse)').matches) {
+        document.documentElement.classList.add('is-touch');
+      }
+    })();
+  </script>
+
+  <link rel="stylesheet" href="styles/main.css?v=5">
 
   <!-- Structured data -->
   <script type="application/ld+json">
@@ -173,7 +181,6 @@
 
         <p class="hero__lead" data-hero-el="lead">
           <span class="hero__text-full">ניקוי וחיטוי תעלות מיזוג מרכזי לבתים, משרדים ועסקים — בסטנדרט הגבוה בישראל. אנחנו מראים לכם בדיוק מה ניקינו: לפני, ואחרי, על המערכת שלכם.</span>
-          <span class="hero__text-short">לפני ואחרי — על המערכת שלכם.</span>
         </p>
 
         <div class="hero__ctas" data-hero-el="ctas">
@@ -233,9 +240,8 @@
           </div>
 
           <div class="problem__col">
-            <p class="lead" data-reveal>
+            <p class="lead problem__intro" data-reveal>
               <span class="problem__text-full">תעלות המיזוג הן "הריאות" של הבית או המשרד — כל האוויר שאתם נושמים עובר דרכן. עם השנים מצטברים בתוכן אבק, לחות, עובש וחלקיקים שאתם לא רואים. בכל פעם שהמיזוג נדלק, הם חוזרים לחלל ומסתובבים באוויר שאתם והילדים נושמים.</span>
-              <span class="problem__text-short">כל האוויר בבית עובר בתעלות — עם השנים מצטבר שם לכלוך שאתם לא רואים.</span>
             </p>
 
             <ul class="problem__items">
@@ -268,7 +274,7 @@
               <span class="problem__stat-num"><span data-count="90">0</span><small>%</small></span>
               <p class="problem__stat-label">
                 <span class="problem__text-full">מהזמן אנחנו נמצאים בחלל סגור — נושמים את אותו אוויר ממוחזר.</span>
-                <span class="problem__text-short">מהזמן בחלל סגור — נושמים אוויר ממוחזר.</span>
+                <span class="problem__text-short">מהזמן בחלל סגור</span>
               </p>
             </div>
           </div>
@@ -773,6 +779,6 @@
   <script defer src="https://unpkg.com/lenis@1.1.19/dist/lenis.min.js"></script>
 
   <!-- Scripts (module entry) -->
-  <script type="module" src="scripts/main.js"></script>
+  <script type="module" src="scripts/main.js?v=5"></script>
 </body>
 </html>
