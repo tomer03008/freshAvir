@@ -2698,6 +2698,64 @@ p {
     gap: var(--s-5);
   }
 
+  .problem {
+    padding-block: clamp(2rem, 5vw, 2.75rem);
+  }
+
+  .problem .section-head {
+    margin-block-end: var(--s-4);
+  }
+
+  .problem__grid {
+    gap: var(--s-4);
+  }
+
+  .problem__col > .lead {
+    margin-block-end: var(--s-3);
+    font-size: 1rem;
+    line-height: 1.55;
+  }
+
+  .problem__items {
+    gap: var(--s-2);
+    margin-block: var(--s-3);
+  }
+
+  .problem__item {
+    align-items: center;
+    gap: var(--s-3);
+    padding: 0.85rem 1rem;
+  }
+
+  .problem__item p {
+    display: none;
+  }
+
+  .problem__item h3 {
+    margin-block-end: 0;
+    font-size: 1.05rem;
+  }
+
+  .problem__item-num {
+    font-size: 1.5rem;
+    min-inline-size: 2rem;
+  }
+
+  .problem__stat {
+    margin-block-start: var(--s-3);
+    padding: var(--s-4) var(--s-5);
+    gap: var(--s-4);
+  }
+
+  .problem__stat-num {
+    font-size: clamp(2.5rem, 8vw, 3.25rem);
+  }
+
+  .problem__stat-label {
+    font-size: 0.92rem;
+    line-height: 1.45;
+  }
+
   .problem__visual--secondary {
     display: none;
   }
@@ -2774,6 +2832,10 @@ p {
   }
 
   .hero__lead-desktop {
+    display: block !important;
+  }
+
+  .problem__item p {
     display: block !important;
   }
 }
